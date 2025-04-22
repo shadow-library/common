@@ -19,7 +19,7 @@ import { InternalError, TaskExecutor } from '@shadow-library/common';
 describe('TaskExecutor', () => {
   it('executes successfully without retry', async () => {
     const fn = jest.fn().mockResolvedValue('done');
-    const result = await TaskExecutor.create(fn).delay(10).execute();
+    const result = await TaskExecutor.create(fn).name('Mock').delay(10).execute();
     expect(result).toBe('done');
     expect(fn).toHaveBeenCalledTimes(1);
   });
@@ -58,7 +58,7 @@ describe('TaskExecutor', () => {
     await expect(task.executeRollback()).rejects.toThrow(InternalError);
   });
 
-  it('throws if rollback is missing', async () => {
+  it('throws error if rollback is missing and rollback is called', async () => {
     const fn = jest.fn().mockResolvedValue('data');
     const task = TaskExecutor.create(fn);
     await task.execute();
