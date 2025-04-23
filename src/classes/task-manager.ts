@@ -9,7 +9,7 @@ import assert from 'assert';
 import { Fn } from '@lib/interfaces';
 import { Logger } from '@lib/services';
 
-import { TaskExecutor } from './task-executor';
+import { Task } from './task';
 
 /**
  * Defining types
@@ -20,7 +20,7 @@ export interface TaskManagerOptions {
   name: string;
 }
 
-export type Task = TaskExecutor<any> | Fn;
+export type ITask = Task<any> | Fn;
 
 /**
  * Declaring the constants
@@ -29,8 +29,8 @@ export type Task = TaskExecutor<any> | Fn;
 export class TaskManager {
   private static readonly logger = Logger.getLogger(TaskManager.name);
 
-  private readonly tasks: Task[] = [];
-  private readonly results = new Map<Task, any>();
+  private readonly tasks: ITask[] = [];
+  private readonly results = new Map<ITask, any>();
   private readonly options: TaskManagerOptions = { rollbackOnError: true, name: 'Unknown Task Orchestrator' };
 
   constructor(opts: Partial<TaskManagerOptions> = {}) {
@@ -50,23 +50,23 @@ export class TaskManager {
       const task = this.tasks[index];
       assert(task, `Rollback task at index ${index} is undefined, which is not possible`);
 
-      if (task instanceof TaskExecutor && task.hasRollback()) {
+      if (task instanceof Task && task.hasRollback()) {
         await task.executeRollback();
         logger.info(`${name}: Rolled back task ${index + 1}`);
       } else logger.debug(`${name}: Skipping rollback for task ${index + 1}, no rollback function defined`);
     }
   }
 
-  addTask(task: Task): this {
+  addTask(task: ITask): this {
     this.tasks.push(task);
     return this;
   }
 
-  getResult<T = any>(task: Task): T {
+  getResult<T = any>(task: ITask): T {
     return this.results.get(task);
   }
 
-  async execute(): Promise<Map<Task, any>> {
+  async execute(): Promise<Map<ITask, any>> {
     const logger = TaskManager.logger;
     const { name, rollbackOnError } = this.options;
 

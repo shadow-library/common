@@ -6,7 +6,7 @@ import { describe, expect, it, jest } from 'bun:test';
 /**
  * Importing user defined packages
  */
-import { TaskExecutor, TaskManager } from '@shadow-library/common';
+import { Task, TaskManager } from '@shadow-library/common';
 
 /**
  * Defining types
@@ -33,7 +33,7 @@ describe('TaskManager', () => {
 
   it('should return results of tasks', async () => {
     const manager = TaskManager.create();
-    const task1 = TaskExecutor.create(jest.fn().mockResolvedValue('task1'));
+    const task1 = Task.create(jest.fn().mockResolvedValue('task1'));
     const task2 = jest.fn().mockResolvedValue('task2');
 
     manager.addTask(task1);
@@ -51,7 +51,7 @@ describe('TaskManager', () => {
   it('should rollback tasks on error', async () => {
     const manager = TaskManager.create({ rollbackOnError: true });
     const rollback = jest.fn();
-    const task1 = TaskExecutor.create(jest.fn().mockResolvedValue('task1')).rollback(rollback);
+    const task1 = Task.create(jest.fn().mockResolvedValue('task1')).rollback(rollback);
     const task2 = jest.fn().mockRejectedValue(new Error('task2 error'));
 
     manager.addTask(task1);

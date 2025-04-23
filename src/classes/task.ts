@@ -22,8 +22,8 @@ export type RollbackFn<T> = (data: T) => Promisable<unknown>;
  * Declaring the constants
  */
 
-export class TaskExecutor<T> {
-  private static readonly logger = Logger.getLogger(TaskExecutor.name);
+export class Task<T> {
+  private static readonly logger = Logger.getLogger(Task.name);
 
   private taskName = '';
   private retries = 3;
@@ -38,8 +38,8 @@ export class TaskExecutor<T> {
     this.taskName = fn.name ?? 'Unnamed Task';
   }
 
-  static create<T>(fn: Fn<T>): TaskExecutor<T> {
-    return new TaskExecutor(fn);
+  static create<T>(fn: Fn<T>): Task<T> {
+    return new Task(fn);
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -84,7 +84,7 @@ export class TaskExecutor<T> {
   async execute(): Promise<T> {
     let attempt = 1;
     let delay = this.delayMs;
-    const logger = TaskExecutor.logger;
+    const logger = Task.logger;
 
     while (attempt <= this.retries) {
       try {
@@ -122,6 +122,6 @@ export class TaskExecutor<T> {
     if (!this.result) throw new InternalError('No result to rollback');
     if (!this.rollbackFn) throw new InternalError('No rollback function provided');
     await this.rollbackFn(this.result);
-    TaskExecutor.logger.debug(`Rollback executed for task: ${this.taskName}`);
+    Task.logger.debug(`Rollback executed for task: ${this.taskName}`);
   }
 }
