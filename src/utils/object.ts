@@ -27,6 +27,14 @@ class ObjectUtils {
   }
 
   /**
+   * Checks if the given object is a class.
+   * A class is a function that starts with the keyword 'class'.
+   */
+  isClass(Class: any): boolean {
+    return typeof Class === 'function' && /^class\s/.test(Class.toString());
+  }
+
+  /**
    * Returns the value of the given path in the object
    */
   getByPath<T = any>(obj: Record<string, any>, path: string): T | undefined {
