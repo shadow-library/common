@@ -14,7 +14,7 @@
  * Declaring the constants
  */
 
-export type Primitive = string | number | boolean | bigint | symbol | null | undefined;
+export type PrimitiveValue = string | number | boolean | bigint | symbol;
 
 export type MaybeArray<T> = T | T[];
 
@@ -24,4 +24,4 @@ export type MaybeUndefined<T> = T | undefined;
 
 export type Nullable<T> = T | null | undefined;
 
-export type SyncValue<T = unknown> = T extends Promise<any> ? never : T;
+export type SyncValue<T = unknown> = T extends Promise<unknown> ? never : T;
