@@ -132,4 +132,4 @@ export class ConfigService<Configs extends ConfigRecords = ConfigRecords> {
 }
 
 const globalRef = global as any;
-export const Config: ConfigService = (globalRef.configService ??= new ConfigService());
+export const Config: ConfigService = globalRef.configService || (globalRef.configService = new ConfigService());
