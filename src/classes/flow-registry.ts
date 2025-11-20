@@ -68,14 +68,14 @@ export class FlowRegistry {
 
   restore<StateNames extends string = string, Context extends Record<string, any> = Record<string, any>>(snapshot: string): FlowManager<StateNames, Context> {
     const parsed: ParsedSnapshot<StateNames, Context> = JSON.parse(snapshot);
-    if (!parsed.flowName) throw new InternalError('Snapshot missing flowType field');
+    if (!parsed.flowName) throw new InternalError('Snapshot missing flowName field');
     const definition = this.get<StateNames, Context>(parsed.flowName);
     return FlowManager.from(definition, parsed.state);
   }
 
   getFlowName(snapshot: string): string {
     const match = snapshot.match(/"flowName"\s*:\s*"([^"]+)"/);
-    if (!match) throw new InternalError('Snapshot missing flowType field');
+    if (!match) throw new InternalError('Snapshot missing flowName field');
     return match[1] as string;
   }
 }

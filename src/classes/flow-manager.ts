@@ -60,7 +60,7 @@ export class FlowManager<StateNames extends string = string, Context extends Rec
   ): FlowManager<StateNames, Context> {
     if (typeof stateOrSnapshot === 'string') {
       const parsed = JSON.parse(stateOrSnapshot);
-      if (parsed.definition !== definition.name) new InternalError(`Snapshot definition '${parsed.definition}' does not match provided definition '${definition.name}'`);
+      if (parsed.flowName !== definition.name) throw new InternalError(`Snapshot definition '${parsed.flowName}' does not match provided definition '${definition.name}'`);
       stateOrSnapshot = parsed.state as FlowState<StateNames, Context>;
     }
 

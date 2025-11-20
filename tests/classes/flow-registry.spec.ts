@@ -303,7 +303,7 @@ describe('FlowRegistry', () => {
       const invalidSnapshot = JSON.stringify({ state: { currentState: 'start', history: [], context: {} } });
 
       expect(() => registry.restore(invalidSnapshot)).toThrow(InternalError);
-      expect(() => registry.restore(invalidSnapshot)).toThrow('Snapshot missing flowType field');
+      expect(() => registry.restore(invalidSnapshot)).toThrow('Snapshot missing flowName field');
     });
 
     it('should throw error for unregistered flow in snapshot', () => {
@@ -353,7 +353,7 @@ describe('FlowRegistry', () => {
       const invalidSnapshot = JSON.stringify({ state: { currentState: 'start', history: [], context: {} } });
 
       expect(() => registry.getFlowName(invalidSnapshot)).toThrow(InternalError);
-      expect(() => registry.getFlowName(invalidSnapshot)).toThrow('Snapshot missing flowType field');
+      expect(() => registry.getFlowName(invalidSnapshot)).toThrow('Snapshot missing flowName field');
     });
 
     it('should handle snapshots with whitespace around flowName', () => {

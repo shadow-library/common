@@ -58,6 +58,28 @@ describe('FlowManager', () => {
   });
 
   describe('from', () => {
+    it('should throw error for snapshot with mismatched definition', () => {
+      const context: OrderContext = { orderId: '123', items: ['item1'], totalAmount: 100 };
+      const originalFlow = FlowManager.create(orderFlowDefinition, context);
+      originalFlow.transitionTo('processing');
+
+      const snapshot = originalFlow.toSnapshot();
+
+      const wrongDefinition: FlowDefinition<OrderState, OrderContext> = {
+        name: 'WrongFlow',
+        startState: 'pending',
+        states: {
+          pending: { getNextStates: () => ['processing', 'cancelled'] },
+          processing: { getNextStates: () => ['shipped', 'cancelled'] },
+          shipped: { getNextStates: () => ['delivered'] },
+          delivered: { isFinal: true },
+          cancelled: { isFinal: true },
+        },
+      };
+
+      expect(() => FlowManager.from<OrderState, OrderContext>(wrongDefinition, snapshot)).toThrow(InternalError);
+    });
+
     it('should create flow manager from snapshot string', () => {
       const context: OrderContext = { orderId: '123', items: ['item1'], totalAmount: 100 };
       const originalFlow = FlowManager.create(orderFlowDefinition, context);
