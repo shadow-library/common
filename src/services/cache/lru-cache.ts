@@ -99,7 +99,7 @@ export class LRUCache {
     const pointer = this.items[key];
     if (typeof pointer === 'undefined') return;
     const ttl = this.ttls[pointer];
-    if (!ttl || ttl < performance.now()) this.remove(key);
+    if (ttl && ttl < performance.now()) this.remove(key);
   }
 
   clear(): void {
