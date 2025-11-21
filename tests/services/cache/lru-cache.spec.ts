@@ -402,30 +402,30 @@ describe('LRUCache', () => {
     });
 
     describe('TTL with updates and access patterns', () => {
-      it('should reset TTL on update', async () => {
+      it('should reset TTL on update', () => {
         const ttlCache = new LRUCache(3, { ttl: 3 });
         ttlCache.set('key1', 'value1');
 
-        await Bun.sleep(2);
+        Bun.sleepSync(2);
         ttlCache.set('key1', 'updated'); // Reset TTL
 
-        await Bun.sleep(2); // Original would expire now, but reset TTL keeps it
+        Bun.sleepSync(2); // Original would expire now, but reset TTL keeps it
 
         expect(ttlCache.get('key1')).toBe('updated');
       });
 
-      it('should extend lifetime with get() moving item to top', async () => {
+      it('should extend lifetime with get() moving item to top', () => {
         const ttlCache = new LRUCache(3, { ttl: 3 });
         ttlCache.set('key1', 'value1');
         ttlCache.set('key2', 'value2');
         ttlCache.set('key3', 'value3');
 
-        await Bun.sleep(2);
+        Bun.sleepSync(2);
 
         // Access key1 to move to top (but TTL doesn't reset on get)
         ttlCache.get('key1');
 
-        await Bun.sleep(2); // key1 should be expired now
+        Bun.sleepSync(2); // key1 should be expired now
 
         expect(ttlCache.get('key1')).toBeUndefined();
       });
