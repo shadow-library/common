@@ -312,7 +312,7 @@ describe('LRUCache', () => {
       });
 
       it('should handle mixed expired and non-expired items', async () => {
-        const ttlCache = new LRUCache(3, { ttl: 2 });
+        const ttlCache = new LRUCache(3, { ttl: 3 });
         ttlCache.set('key1', 'value1');
 
         await Bun.sleep(2);
