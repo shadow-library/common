@@ -67,7 +67,9 @@ export class FlowManager<StateNames extends string = string, Context extends Rec
   private constructor(
     private readonly definition: FlowDefinition<StateNames, Context>,
     private readonly state: FlowState<StateNames, Context>,
-  ) {}
+  ) {
+    this.settle();
+  }
 
   static create<StateNames extends string = string, Context extends Record<string, any> = Record<string, any>>(
     definition: FlowDefinition<StateNames, Context>,
