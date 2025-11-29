@@ -67,16 +67,16 @@ export class FlowManager<StateNames extends string = string, Context extends Rec
   private constructor(
     private readonly definition: FlowDefinition<StateNames, Context>,
     private readonly state: FlowState<StateNames, Context>,
-  ) {
-    this.settle();
-  }
+  ) {}
 
   static create<StateNames extends string = string, Context extends Record<string, any> = Record<string, any>>(
     definition: FlowDefinition<StateNames, Context>,
     initialContext: Context = {} as Context,
   ): FlowManager<StateNames, Context> {
     const initialState: FlowState<StateNames, Context> = { currentState: definition.startState, history: [], context: initialContext };
-    return new FlowManager(definition, initialState);
+    const flow = new FlowManager(definition, initialState);
+    flow.settle();
+    return flow;
   }
 
   static from<StateNames extends string = string, Context extends Record<string, any> = Record<string, any>>(
