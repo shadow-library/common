@@ -78,10 +78,9 @@ class PaginationUtils {
     assert(typeof totalOrCursor === 'function', 'getCursor function is required for cursor pagination');
 
     let resultItems = items;
-    let lastItem = items[items.length - 1] as Item;
     let nextCursor: string | null = null;
     if (items.length > query.limit) {
-      lastItem = items[query.limit - 1] as Item;
+      const lastItem = items[query.limit - 1] as Item;
       resultItems = items.slice(0, query.limit);
       nextCursor = totalOrCursor(lastItem);
     }
