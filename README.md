@@ -1248,7 +1248,7 @@ The package uses environment variables for configuration. Below are the key vari
 
 #### String Utils
 
-- `utils.string.startsAndEndsWith(str, values)` - Check if string starts and ends with the given value
+- `utils.string.startsAndEndsWith(str, value)` - Check if string starts and ends with the given value
 - `utils.string.parseCsv(input)` - Parse CSV string into array (handles quoted values, escaped quotes, whitespace trimming)
 - `utils.string.interpolate(template, data)` - Interpolate string with object
 - `utils.string.maskEmail(email)` - Mask email address preserving structure

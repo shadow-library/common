@@ -19,8 +19,8 @@ import { objectUtils } from './object';
 const MASK_CHAR = '*';
 
 class StringUtils {
-  startsAndEndsWith(str: string, values: string): boolean {
-    return str.startsWith(values) && str.endsWith(values);
+  startsAndEndsWith(str: string, value: string): boolean {
+    return str.startsWith(value) && str.endsWith(value);
   }
 
   parseCsv(input: string): string[] {
