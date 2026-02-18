@@ -35,6 +35,14 @@ interface CustomConfigRecords extends ConfigRecords {
 /**
  * Declaring the constants
  */
+mock.module('chokidar', () => {
+  return {
+    watch: () => ({
+      on: () => ({}),
+      close: () => ({}),
+    }),
+  };
+});
 
 describe('Config Service', () => {
   process.env.TEST_SAMPLE_ONE = 'test-value-one';
@@ -291,6 +299,21 @@ describe('Config Service', () => {
       reloadConfig['reload']();
 
       expect(reloadConfig.get('reloadable.key')).toBe('updated-value');
+    });
+
+    it('should fall back to default value when a key is removed from the env file', () => {
+      const reloadConfig = new ConfigService<CustomConfigRecords>();
+      reloadConfig.load('reloadable.key', { defaultValue: 'fallback', reloadable: true });
+      expect(reloadConfig.get('reloadable.key')).toBe('initial-value');
+
+      const callback = mock(() => {});
+      reloadConfig.subscribe('reloadable' as any, callback);
+
+      fs.writeFileSync(envFilePath, '# key removed\n');
+      reloadConfig['reload']();
+
+      expect(reloadConfig.get('reloadable.key')).toBe('fallback');
+      expect(callback).toHaveBeenCalledWith('reloadable.key', 'fallback');
     });
 
     it('should notify subscribers when a reloadable config changes', () => {

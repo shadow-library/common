@@ -64,9 +64,11 @@ export interface ConfigRecords {
 /**
  * Declaring the constants
  */
+const INTEGER_REGEX = /^-?\d+$/;
+const NUMBER_REGEX = /^-?\d+(\.\d+)?$/;
 const BOOLEAN_CONFIG_OPTIONS: Partial<ConfigOptions> = { allowedValues: ['true', 'false'], transform: val => val === 'true' };
-const NUMBER_CONFIG_OPTIONS: Partial<ConfigOptions> = { validator: val => !isNaN(Number(val)), transform: val => Number(val) };
-const INTEGER_CONFIG_OPTIONS: Partial<ConfigOptions> = { validator: val => Number.isInteger(Number(val)), transform: val => Number(val) };
+const NUMBER_CONFIG_OPTIONS: Partial<ConfigOptions> = { validator: val => NUMBER_REGEX.test(val), transform: val => Number(val) };
+const INTEGER_CONFIG_OPTIONS: Partial<ConfigOptions> = { validator: val => INTEGER_REGEX.test(val), transform: val => Number(val) };
 
 export class ConfigService<Configs extends ConfigRecords = ConfigRecords> {
   private readonly cache = new Map<keyof Configs, any>();
@@ -126,7 +128,8 @@ export class ConfigService<Configs extends ConfigRecords = ConfigRecords> {
       if (!key) continue;
 
       const rawValue = trimmed.slice(eqIndex + 1).trim();
-      result[key] = utils.string.startsAndEndsWith(rawValue, "'") ? rawValue.slice(1, -1) : rawValue;
+      const hasQuotes = utils.string.startsAndEndsWith(rawValue, '"') || utils.string.startsAndEndsWith(rawValue, "'");
+      result[key] = hasQuotes ? rawValue.slice(1, -1) : rawValue;
     }
     return result;
   }
@@ -139,7 +142,8 @@ export class ConfigService<Configs extends ConfigRecords = ConfigRecords> {
         const envVars = this.parseEnvFile(content);
         Object.assign(envs, envVars);
       } catch (err) {
-        this.log('error', `Failed to load env file at path '${filePath}'. Error: ${JSON.stringify(err)}`);
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        this.log('error', `Failed to load env file at path '${filePath}'. Error: ${errorMessage}`);
       }
     }
     return envs;
@@ -240,9 +244,10 @@ export class ConfigService<Configs extends ConfigRecords = ConfigRecords> {
 
     this.fsWatcher = watch(this.envFilePaths, {
       depth: 0,
-      atomic: true,
+      usePolling: true,
+      interval: 1000,
       ignoreInitial: true,
-      ignored: filePath => !this.envFilePaths.includes(filePath),
+      ignored: filePath => !this.envFilePaths.includes(path.resolve(filePath)),
     });
 
     this.fsWatcher.on('change', () => this.reload());
