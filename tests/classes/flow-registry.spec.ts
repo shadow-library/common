@@ -306,6 +306,12 @@ describe('FlowRegistry', () => {
       expect(() => registry.restore(invalidSnapshot)).toThrow("Failed to process flow snapshot. The snapshot is malformed or missing the required 'flowName' field.");
     });
 
+    it('should throw error for snapshot with missing state', () => {
+      const invalidSnapshot = JSON.stringify({ flowName: 'auth-flow' });
+
+      expect(() => registry.restore(invalidSnapshot)).toThrow(InternalError);
+    });
+
     it('should throw error for unregistered flow in snapshot', () => {
       const snapshot = JSON.stringify({ flowName: 'unregistered-flow', state: { currentState: 'start', history: [], context: {} } });
 

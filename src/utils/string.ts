@@ -100,8 +100,9 @@ class StringUtils {
     let output = '';
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i] as string;
-      if (!part) output += '';
-      if (part.length <= 3) output += '*'.repeat(part.length);
+      if (!part) {
+        /* empty part — nothing to mask */
+      } else if (part.length <= 3) output += '*'.repeat(part.length);
       else {
         output += part[0];
         for (let j = 1; j < part.length - 1; j++) output += '*';

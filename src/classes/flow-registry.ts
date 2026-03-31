@@ -76,7 +76,7 @@ export class FlowRegistry {
 
   restore<StateNames extends string = string, Context extends Record<string, any> = Record<string, any>>(snapshot: string): FlowManager<StateNames, Context> {
     const parsed: ParsedSnapshot<StateNames, Context> = JSON.parse(snapshot);
-    if (!parsed.flowName) {
+    if (!parsed.flowName || !parsed.state) {
       const error = new AppError(ErrorCode.FLOW_SNAPSHOT_INVALID);
       /** Throwing an internal error for backward compatibility, need to remove in next major version */
       throw new InternalError(error.getMessage()).setCause(error);

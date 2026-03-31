@@ -95,6 +95,12 @@ describe('InMemoryStore', () => {
       store.set('key', 'not-an-array');
       expect(() => store.remove('key', 1)).toThrowError(InternalError);
     });
+
+    it('should use strict equality when removing values', () => {
+      store.set('key', [0, 1, '', false, null, undefined]);
+      store.remove('key', null);
+      expect(store.get('key')).toEqual([0, 1, '', false, undefined]);
+    });
   });
 
   describe('inc()', () => {

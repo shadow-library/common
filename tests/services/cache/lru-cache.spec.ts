@@ -207,6 +207,16 @@ describe('LRUCache', () => {
       expect(cache.has('key1')).toBe(false);
       expect(cache.has('key2')).toBe(false);
     });
+
+    it('should reset TTL data when clearing a cache with TTL', () => {
+      const ttlCache = new LRUCache(3, { ttl: 100 });
+      ttlCache.set('key1', 'value1');
+      ttlCache.set('key2', 'value2');
+      ttlCache.clear();
+
+      ttlCache.set('key1', 'new-value');
+      expect(ttlCache.get('key1')).toBe('new-value');
+    });
   });
 
   describe('splayOnTop()', () => {

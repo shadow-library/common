@@ -93,6 +93,14 @@ describe('Pagination Utils', () => {
 
         expect(result).toStrictEqual(defaults);
       });
+
+      it('should not mutate the input object', () => {
+        const input = { limit: '25', offset: '10' };
+        utils.pagination.normalise(input, options);
+
+        expect(input.limit).toBe('25');
+        expect(input.offset).toBe('10');
+      });
     });
 
     describe('page mode', () => {

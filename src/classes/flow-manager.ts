@@ -90,6 +90,10 @@ export class FlowManager<StateNames extends string = string, Context extends Rec
         /** Throwing an internal error for backward compatibility, need to remove in next major version */
         throw new InternalError(error.getMessage()).setCause(error);
       }
+      if (!parsed.state || typeof parsed.state.currentState !== 'string' || !Array.isArray(parsed.state.history)) {
+        const error = new AppError(ErrorCode.FLOW_SNAPSHOT_INVALID);
+        throw new InternalError(error.getMessage()).setCause(error);
+      }
       stateOrSnapshot = parsed.state as FlowState<StateNames, Context>;
     }
 

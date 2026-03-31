@@ -50,7 +50,7 @@ export class InMemoryStore {
   remove<T>(key: string, value: T): InMemoryStore {
     const array = this.getOptionalArray<T>(key);
     if (array) {
-      const updatedArray = array.filter(item => item != value);
+      const updatedArray = array.filter(item => item !== value);
       this.set(key, updatedArray);
     }
     return this;

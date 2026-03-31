@@ -115,6 +115,7 @@ export class LRUCache {
 
     this.keys = new Array(this.capacity);
     this.values = new Array(this.capacity);
+    if (this.options.ttl) this.ttls = new Array(this.capacity);
   }
 
   set<T>(key: string, value: T): LRUCache {

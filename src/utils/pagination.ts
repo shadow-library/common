@@ -37,8 +37,8 @@ class PaginationUtils {
     const pagination = { ...options.defaults };
 
     if (input.limit) {
-      if (typeof input.limit === 'string') input.limit = parseInt(input.limit);
-      if (!isNaN(input.limit) && input.limit > 0) pagination.limit = input.limit;
+      const limit = typeof input.limit === 'string' ? parseInt(input.limit) : input.limit;
+      if (!isNaN(limit) && limit > 0) pagination.limit = limit;
     }
 
     if (input.sortBy) pagination.sortBy = input.sortBy;
@@ -48,13 +48,13 @@ class PaginationUtils {
     }
 
     if (options.mode === 'offset' && input.offset) {
-      if (typeof input.offset === 'string') input.offset = parseInt(input.offset);
-      if (!isNaN(input.offset) && input.offset >= 0) (pagination as OffsetPagination).offset = input.offset;
+      const offset = typeof input.offset === 'string' ? parseInt(input.offset) : input.offset;
+      if (!isNaN(offset) && offset >= 0) (pagination as OffsetPagination).offset = offset;
     }
 
     if (options.mode === 'page' && input.page) {
-      if (typeof input.page === 'string') input.page = parseInt(input.page);
-      if (!isNaN(input.page) && input.page > 0) (pagination as PagePagination).page = input.page;
+      const page = typeof input.page === 'string' ? parseInt(input.page) : input.page;
+      if (!isNaN(page) && page > 0) (pagination as PagePagination).page = page;
     }
 
     if (options.mode === 'cursor' && input.cursor) (pagination as CursorPagination).cursor = input.cursor;

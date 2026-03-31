@@ -140,7 +140,9 @@ export class APIRequest {
     /** Execute the request */
     const startTime = process.hrtime();
     const response = await request(url, requestOptions);
-    const resData = response.headers['content-type']?.includes('application/json') ? await response.body.json() : null;
+    let resData: any = null;
+    if (response.headers['content-type']?.includes('application/json')) resData = await response.body.json();
+    else await response.body?.dump?.();
     const endTime = process.hrtime(startTime);
     const timeTaken = (endTime[0] * 1e3 + endTime[1] * 1e-6).toFixed(3);
 

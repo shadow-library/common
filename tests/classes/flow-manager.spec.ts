@@ -80,6 +80,16 @@ describe('FlowManager', () => {
       expect(() => FlowManager.from<OrderState, OrderContext>(wrongDefinition, snapshot)).toThrow(InternalError);
     });
 
+    it('should throw error for snapshot with missing state data', () => {
+      const snapshotMissingState = JSON.stringify({ flowName: 'OrderFlow' });
+      expect(() => FlowManager.from<OrderState, OrderContext>(orderFlowDefinition, snapshotMissingState)).toThrow(InternalError);
+    });
+
+    it('should throw error for snapshot with invalid state structure', () => {
+      const snapshotInvalidState = JSON.stringify({ flowName: 'OrderFlow', state: { currentState: 123 } });
+      expect(() => FlowManager.from<OrderState, OrderContext>(orderFlowDefinition, snapshotInvalidState)).toThrow(InternalError);
+    });
+
     it('should create flow manager from snapshot string', () => {
       const context: OrderContext = { orderId: '123', items: ['item1'], totalAmount: 100 };
       const originalFlow = FlowManager.create(orderFlowDefinition, context);
