@@ -1,3 +1,6 @@
+> **Archived — migrated to the [platform monorepo](https://github.com/shadow-library/platform).**
+> This code now lives at [`packages/common`](https://github.com/shadow-library/platform/tree/main/packages/common) with its full history; this repository is read-only.
+
 # @shadow-library/common
 
 The **@shadow-library/common** package provides a comprehensive collection of essential utilities, services, and error-handling mechanisms designed to streamline development across the Shadow Library ecosystem. This package is built with TypeScript and offers robust, reusable components for task management, API requests, caching, logging, configuration management, and more.
